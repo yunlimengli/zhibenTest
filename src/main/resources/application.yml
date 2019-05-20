@@ -1,0 +1,213 @@
+server:
+  port: 8162
+  tomcat:
+    uri-encoding: utf-8
+
+#websocket 相关配置
+socket:
+  server:
+    url: ws://192.168.3.41:8081/websockt/station  # 主WEB 连接地址
+    serverNo: S-serverstroe001  # 服务器编号  or 采集站编号
+    #采集站类型
+    type: 2  # 1 web 2 储存 3采集站
+    version: 0.00.00
+  file:
+    maxdown: 5 #最大下载文件数量
+
+#------------------------------------------------------------------------------------------------------------
+#日志的配置
+logging:
+  config: classpath:config/logback-spring.xml
+  path: F:/mylog/nnlog
+
+
+#  file: log/zb-shiro.log
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 2048Mb
+      max-request-size: 2048Mb
+  datasource:
+    type: com.alibaba.druid.pool.xa.DruidXADataSource
+    druid:
+      webDB:
+        name: webDB
+        url: jdbc:mysql://192.168.3.41:3306/zhiben_usa_web?useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: zb123456
+        # 下面为连接池的补充设置，应用到上面所有数据源中
+        # 初始化大小，最小，最大
+        initialSize: 5
+        minIdle: 5
+        maxActive: 20
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        minEvictableIdleTimeMillis: 30001
+        validationQuery: SELECT 1
+        validationQueryTimeout: 10000
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        # 打开PSCache，并且指定每个连接上PSCache的大小
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat,wall
+        # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+        # 合并多个DruidDataSource的监控数据
+        useGlobalDataSourceStat: true
+
+      sysLogDB:
+        name: sysLogDB
+
+        url: jdbc:mysql://192.168.3.41:3306/zhiben_usa_web?useUnicode=true&characterEncoding=utf-8
+        username: root
+        password: zb123456
+        # 下面为连接池的补充设置，应用到上面所有数据源中
+        # 初始化大小，最小，最大
+        initialSize: 5
+        minIdle: 5
+        maxActive: 20
+        # 配置获取连接等待超时的时间
+        maxWait: 60000
+        # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+        timeBetweenEvictionRunsMillis: 60000
+        # 配置一个连接在池中最小生存的时间，单位是毫秒
+        minEvictableIdleTimeMillis: 30001
+        validationQuery: SELECT 1
+        validationQueryTimeout: 10000
+        testWhileIdle: true
+        testOnBorrow: false
+        testOnReturn: false
+        # 打开PSCache，并且指定每个连接上PSCache的大小
+        poolPreparedStatements: true
+        maxPoolPreparedStatementPerConnectionSize: 20
+        filters: stat,wall
+        # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+        connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+        # 合并多个DruidDataSource的监控数据
+        useGlobalDataSourceStat: true
+
+
+  #--------------------------------------------------------------------------------------------------------
+  #国际化配置
+  messages:
+    basename: i18n/messages/message
+    encoding: UTF-8
+  #--------------------------------------------------------------------------------------------------------
+  # thymeleaf 配置
+  thymeleaf:
+    encoding: utf-8 #默认
+    enabled: true #默认开启
+    mode: HTML5  #默认
+    suffix: .html  #默认
+    prefix: classpath:/templates/  #默认
+    cache: false  #默认为true，在开发阶段通常设为false
+  #---------------------------------------------------------------------------------------------------------
+
+  #redis 配置
+  redis:
+    database: 0
+    host: 192.168.3.41
+    jedis:
+      pool:
+        #最大连接数据库连接数,设 0 为没有限制
+        max-active: 8
+        #最大等待连接中的数量,设 0 为没有限制
+        max-idle: 8
+        #最大建立连接等待时间。如果超过此时间将接到异常。设为-1表示无限制。
+        max-wait: -1ms
+        #最小等待连接中的数量,设 0 为没有限制
+        min-idle: 0
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+        max-wait: -1ms
+        min-idle: 0
+      shutdown-timeout: 100ms
+    password: ''
+    port: 6379
+  #--------------------------------------------------------------------------------------------------------------
+  #json 数据设置 返回时间格式设置
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+
+
+  #----------------------------------------------------------------------------------------------------------------
+  #mybatis配置  配置mybatis的XML
+  mybatis:
+    config-location: classpath:mybatis/mybatis-config.xml
+
+  #-------------------------------------------------------------------------------------------------------------------
+
+  #email 邮件配置
+  mail:
+    host: smtp.163.com
+    username: 15112669087@163.com
+    password: 15112669087
+    properties:
+      mail:
+        smtp:
+          auth: true  # 需要验证登录名和密码
+        starttls:
+          enable: true  # 需要TLS认证 保证发送邮件安全验证
+          required: true
+    default-encoding: UTF-8
+
+      #-----------------------------------------------------------------------------------------------------------------
+      #这是集群需要 配置的 不做集群 不需要配置
+      #    quartz:
+      #      #相关属性配置
+      #      properties:
+      #        org:
+      #          quartz:
+      #            scheduler:
+      #              instanceName: clusteredScheduler
+      #              instanceId: AUTO
+      #            jobStore:
+      #              class: org.quartz.impl.jdbcjobstore.JobStoreTX
+      #              driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+      #              tablePrefix: QRTZ_
+      #              isClustered: false #是否打开集群
+      #              clusterCheckinInterval: 10000
+      #              useProperties: false
+      #            threadPool:
+      #              class: org.quartz.simpl.SimpleThreadPool
+      #              threadCount: 10
+      #              threadPriority: 5
+      #              threadsInheritContextClassLoaderOfInitializingThread: true
+      #      #数据库方式
+      #      job-store-type: jdbc
+    #初始化表结构
+    #jdbc:
+    #initialize-schema: never
+#------------------------------------------------------------------------------------------------------------------
+#线程池的配置
+executorConfig:
+  corePoolSize: 5  #配置核心线程数
+  maxPoolSize: 10  #配置最大线程数
+  queueCapacity: 999 #配置队列大小
+  threadNamePrefix: async-zhiben-  #置线程池中的线程的名称前缀
+
+
+#httpClient最大连接数
+http:
+  maxTotal: 100
+  #并发数
+  defaultMaxPerRoute: 30
+  #创建连接的最长时间
+  connectTimeout: 1000
+  #从连接池中获取到连接的最长时间
+  connectionRequestTimeout: 500
+  #数据传输的最长时间
+  socketTimeout: 10000
+  #提交请求前测试连接是否可用
+  staleConnectionCheckEnabled: true
+

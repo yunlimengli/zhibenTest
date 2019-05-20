@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.usa.zhiben.mapper.web.sysConfig.SysConfigMapper">
+    <resultMap id="BaseResultMap" type="com.usa.zhiben.bean.web.sysConfig.SysConfig">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="config_type" property="configType" jdbcType="INTEGER"/>
+        <result column="config_sub_type" property="configSubType" jdbcType="VARCHAR"/>
+        <result column="config_name" property="configName" jdbcType="VARCHAR"/>
+        <result column="config_content" property="configContent" jdbcType="VARCHAR"/>
+        <result column="memo" property="memo" jdbcType="VARCHAR"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_sys_config
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.usa.zhiben.bean.web.sysConfig.SysConfig">
+    insert into tb_sys_config (id, config_type, config_sub_type, 
+      config_name, config_content, memo
+      )
+    values (#{id,jdbcType=INTEGER}, #{configType,jdbcType=INTEGER}, #{configSubType,jdbcType=VARCHAR}, 
+      #{configName,jdbcType=VARCHAR}, #{configContent,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR}
+      )
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.usa.zhiben.bean.web.sysConfig.SysConfig">
+    update tb_sys_config
+    set config_type = #{configType,jdbcType=INTEGER},
+      config_sub_type = #{configSubType,jdbcType=VARCHAR},
+      config_name = #{configName,jdbcType=VARCHAR},
+      config_content = #{configContent,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select id, config_type, config_sub_type, config_name, config_content, memo
+    from tb_sys_config
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, config_type, config_sub_type, config_name, config_content, memo
+    from tb_sys_config
+  </select>
+
+    <!-- 根据配置分类 和配置名称  查询-->
+    <select id="selectByConfigName" resultMap="BaseResultMap">
+    select id, config_type, config_sub_type, config_name, config_content, memo
+    from tb_sys_config
+    where  config_type = #{configType} and config_name = #{configName}
+  </select>
+
+    <!-- 根据配置分类 名称 更新配置内容 服务器设置不用  -->
+    <update id="updateSysConfigByConfigName">
+      update tb_sys_config set config_content  = #{content}
+      where  config_type = #{configType} and config_name = #{configName}
+  </update>
+
+</mapper>

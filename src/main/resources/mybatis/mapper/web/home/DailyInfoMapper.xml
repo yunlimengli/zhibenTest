@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.usa.zhiben.mapper.web.home.DailyInfoMapper">
+    <resultMap id="BaseResultMap" type="com.usa.zhiben.bean.web.home.DailyInfo">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_daily_information
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.usa.zhiben.bean.web.home.DailyInfo">
+    insert into tb_daily_information (id, `name`, `type`
+      )
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}
+      )
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.usa.zhiben.bean.web.home.DailyInfo">
+    update tb_daily_information
+    set `name` = #{name,jdbcType=VARCHAR},
+      `type` = #{type,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select id, `name`, `type`
+    from tb_daily_information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, `name`, `type`
+    from tb_daily_information
+  </select>
+
+    <!-- 查询该账户所对应的每日资讯 -->
+    <select id="getDailyInfoByUserId" resultType="com.usa.zhiben.bean.web.home.DailyInfo">
+      SELECT tb_daily_information.id  id,tb_daily_information.name name,
+      (
+	      SELECT COUNT(1)  FROM
+          `middle_user_daily` userda,tb_daily_information  dainfo  WHERE userda.`daily_information_id` = dainfo.`id`
+          AND userda.user_id = #{userId}  AND dainfo.id = tb_daily_information.`id`
+      ) statu
+      FROM `tb_daily_information`
+
+  </select>
+
+    <!-- 查询一般使用者所拥有的每日资讯栏目  -->
+    <select id="selectDailyByUserLevel" resultType="com.usa.zhiben.bean.web.home.DailyInfo">
+      SELECT tb_daily_information.id  id,tb_daily_information.name name
+      from  `tb_daily_information` where tb_daily_information.type = 2
+  </select>
+
+    <!-- 删除用户订阅的每日资讯 -->
+    <delete id="deleteMidDailyByUserId">
+      delete FROM  middle_user_daily where middle_user_daily.user_id = #{userId}
+  </delete>
+
+    <!-- 批量插入 用户订阅的每日资讯 -->
+    <insert id="insertList">
+        insert into middle_user_daily ( user_id, daily_information_id
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{userId},#{item})
+        </foreach>
+    </insert>
+</mapper>

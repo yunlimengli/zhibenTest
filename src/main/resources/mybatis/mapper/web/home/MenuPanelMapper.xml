@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.usa.zhiben.mapper.web.home.MenuPanelMapper">
+    <resultMap id="BaseResultMap" type="com.usa.zhiben.bean.web.home.MenuPanel">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <id column="panel_no" property="panelNo" jdbcType="VARCHAR"/>
+        <result column="panel_name" property="panelName" jdbcType="VARCHAR"/>
+        <result column="panel_type" property="panelType" jdbcType="INTEGER"/>
+        <result column="memo" property="memo" jdbcType="VARCHAR"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from tb_menu_panel
+    where id = #{id,jdbcType=INTEGER}
+      and panel_no = #{panelNo,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.usa.zhiben.bean.web.home.MenuPanel">
+    insert into tb_menu_panel (id, panel_no, panel_name, 
+      panel_type, memo)
+    values (#{id,jdbcType=INTEGER}, #{panelNo,jdbcType=VARCHAR}, #{panelName,jdbcType=VARCHAR}, 
+      #{panelType,jdbcType=INTEGER}, #{memo,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.usa.zhiben.bean.web.home.MenuPanel">
+    update tb_menu_panel
+    set panel_name = #{panelName,jdbcType=VARCHAR},
+      panel_type = #{panelType,jdbcType=INTEGER},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+      and panel_no = #{panelNo,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map">
+    select id, panel_no, panel_name, panel_type, memo
+    from tb_menu_panel
+    where id = #{id,jdbcType=INTEGER}
+      and panel_no = #{panelNo,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, panel_no, panel_name, panel_type, memo
+    from tb_menu_panel
+  </select>
+
+    <!-- 根据人员ID 查询 所拥有的面板 -->
+    <select id="getMenuPanelByUserId" resultType="com.usa.zhiben.bean.web.home.MenuPanel">
+
+    SELECT tb_menu_panel.id id,tb_menu_panel.panel_name panelName,tb_menu_panel.`panel_no` panelNo,
+    (
+	    SELECT COUNT(1)  FROM
+         `middle_user_panel` mup,tb_menu_panel  tup WHERE mup.panel_no  = tup.panel_no
+        AND mup.user_id = #{userId}  AND tb_menu_panel.panel_no = tup.panel_no
+    ) statu
+    FROM `tb_menu_panel`
+
+  </select>
+
+    <!--  查询管理员能看到的仪表盘 -->
+    <select id="selectAllPanel" resultType="com.usa.zhiben.bean.web.home.MenuPanel">
+      SELECT id id, panel_no panelNo, panel_name panelName
+       FROM tb_menu_panel
+       WHERE panel_type = 4 OR  panel_type = 5
+
+  </select>
+
+    <!--  查询user能看到的仪表盘 -->
+    <select id="selectUserPanel" resultType="com.usa.zhiben.bean.web.home.MenuPanel">
+      SELECT id id, panel_no panelNo, panel_name panelName
+       FROM tb_menu_panel
+       WHERE panel_type = 5
+  </select>
+
+    <!-- 删除用户设置的仪表盘信息 -->
+    <delete id="deleteMidDailyByUserId">
+     DELETE FROM middle_user_panel WHERE   middle_user_panel.`user_id` = #{userId}
+  </delete>
+
+    <!-- 批量插入 用户设置的仪表盘信息  -->
+    <insert id="insertList">
+        insert into middle_user_panel ( user_id, panel_no
+        )
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{userId},#{item})
+        </foreach>
+    </insert>
+
+    <!-- 查询该用户已经拥有的头部门显示的权限的 编号  -->
+    <select id="getMidMenuPanelByUserId" resultType="String">
+
+     SELECT mup.panel_no FROM middle_user_panel mup WHERE  mup.`panel_no` IN
+    ((
+    SELECT  middle_user_panel.`panel_no` FROM `middle_user_panel`,`tb_menu_panel`
+    WHERE middle_user_panel.`user_id` = #{userId}
+    AND middle_user_panel.`panel_no` = tb_menu_panel.`panel_no`
+    AND (tb_menu_panel.`panel_type` = 1 OR tb_menu_panel.`panel_type` = 2  OR tb_menu_panel.`panel_type` = 3)
+    ))
+    AND mup.`user_id` = #{userId}
+
+
+  </select>
+</mapper>

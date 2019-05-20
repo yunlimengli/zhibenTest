@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.usa.zhiben.mapper.sysLog.SysLogMapper">
+    <resultMap id="BaseResultMap" type="com.usa.zhiben.bean.sysLog.SysLog">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="log_enevt" property="logEnevt" jdbcType="VARCHAR"/>
+        <result column="log_type" property="logType" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="log_date" property="logDate" jdbcType="TIMESTAMP"/>
+        <result column="request_ip" property="requestIp" jdbcType="VARCHAR"/>
+        <result column="server_ip" property="serverIp" jdbcType="VARCHAR"/>
+        <result column="action" property="action" jdbcType="INTEGER"/>
+        <result column="log_level" property="logLevel" jdbcType="INTEGER"/>
+        <result column="log_details" property="logDetails" jdbcType="VARCHAR"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_sys_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.usa.zhiben.bean.sysLog.SysLog">
+    insert into tb_sys_log (id, log_enevt, log_type, 
+      user_id, log_date, request_ip, 
+      server_ip, `action`, log_level, 
+      log_details)
+    values (#{id,jdbcType=INTEGER}, #{logEnevt,jdbcType=VARCHAR}, #{logType,jdbcType=INTEGER}, 
+      #{userId,jdbcType=INTEGER}, #{logDate,jdbcType=TIMESTAMP}, #{requestIp,jdbcType=VARCHAR}, 
+      #{serverIp,jdbcType=VARCHAR}, #{action,jdbcType=INTEGER}, #{logLevel,jdbcType=INTEGER}, 
+      #{logDetails,jdbcType=VARCHAR})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.usa.zhiben.bean.sysLog.SysLog">
+    update tb_sys_log
+    set log_enevt = #{logEnevt,jdbcType=VARCHAR},
+      log_type = #{logType,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      log_date = #{logDate,jdbcType=TIMESTAMP},
+      request_ip = #{requestIp,jdbcType=VARCHAR},
+      server_ip = #{serverIp,jdbcType=VARCHAR},
+      `action` = #{action,jdbcType=INTEGER},
+      log_level = #{logLevel,jdbcType=INTEGER},
+      log_details = #{logDetails,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    select id, log_enevt, log_type, user_id, log_date, request_ip, server_ip, `action`, 
+    log_level, log_details
+    from tb_sys_log
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, log_enevt, log_type, user_id, log_date, request_ip, server_ip, `action`, 
+    log_level, log_details
+    from tb_sys_log
+  </select>
+</mapper>

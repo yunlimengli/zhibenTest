@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.usa.zhiben.mapper.web.user.UserMapper">
+    <resultMap id="BaseResultMap" type="com.usa.zhiben.bean.web.user.User">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="login_name" jdbcType="VARCHAR" property="loginName"/>
+        <result column="login_password" jdbcType="VARCHAR" property="loginPassword"/>
+        <result column="login_salt" jdbcType="VARCHAR" property="loginSalt"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="frist_name" jdbcType="VARCHAR" property="fristName"/>
+        <result column="last_name" jdbcType="VARCHAR" property="lastName"/>
+        <result column="user_birthday" jdbcType="DATE" property="userBirthday"/>
+        <result column="sworn_date" jdbcType="DATE" property="swornDate"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="user_role" jdbcType="VARCHAR" property="userRole"/>
+        <result column="division_id" jdbcType="INTEGER" property="divisionId"/>
+        <result column="user_status" jdbcType="INTEGER" property="userStatus"/>
+        <result column="device_password" jdbcType="VARCHAR" property="devicePassword"/>
+        <result column="user_sex" jdbcType="INTEGER" property="userSex"/>
+        <result column="user_phone" jdbcType="VARCHAR" property="userPhone"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="last_login_time" jdbcType="TIMESTAMP" property="lastLoginTime"/>
+        <result column="uesr_ip" jdbcType="VARCHAR" property="uesrIp"/>
+        <result column="ip_status" jdbcType="INTEGER" property="ipStatus"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.usa.zhiben.bean.web.user.User">
+    insert into tb_user (id, login_name, login_password, 
+      login_salt, user_id, frist_name, 
+      last_name, user_birthday, sworn_date, 
+      email, user_role, division_id, 
+      user_status, device_password, user_sex, 
+      user_phone, create_time, last_login_time, 
+      uesr_ip, ip_status)
+    values (#{id,jdbcType=INTEGER}, #{loginName,jdbcType=VARCHAR}, #{loginPassword,jdbcType=VARCHAR}, 
+      #{loginSalt,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{fristName,jdbcType=VARCHAR}, 
+      #{lastName,jdbcType=VARCHAR}, #{userBirthday,jdbcType=DATE}, #{swornDate,jdbcType=DATE}, 
+      #{email,jdbcType=VARCHAR}, #{userRole,jdbcType=VARCHAR}, #{divisionId,jdbcType=INTEGER}, 
+      #{userStatus,jdbcType=INTEGER}, #{devicePassword,jdbcType=VARCHAR}, #{userSex,jdbcType=INTEGER}, 
+      #{userPhone,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastLoginTime,jdbcType=TIMESTAMP}, 
+      #{uesrIp,jdbcType=VARCHAR}, #{ipStatus,jdbcType=INTEGER})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.usa.zhiben.bean.web.user.User">
+    update tb_user
+    set login_name = #{loginName,jdbcType=VARCHAR},
+      login_password = #{loginPassword,jdbcType=VARCHAR},
+      login_salt = #{loginSalt,jdbcType=VARCHAR},
+      user_id = #{userId,jdbcType=VARCHAR},
+      frist_name = #{fristName,jdbcType=VARCHAR},
+      last_name = #{lastName,jdbcType=VARCHAR},
+      user_birthday = #{userBirthday,jdbcType=DATE},
+      sworn_date = #{swornDate,jdbcType=DATE},
+      email = #{email,jdbcType=VARCHAR},
+      user_role = #{userRole,jdbcType=VARCHAR},
+      division_id = #{divisionId,jdbcType=INTEGER},
+      user_status = #{userStatus,jdbcType=INTEGER},
+      device_password = #{devicePassword,jdbcType=VARCHAR},
+      user_sex = #{userSex,jdbcType=INTEGER},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      last_login_time = #{lastLoginTime,jdbcType=TIMESTAMP},
+      uesr_ip = #{uesrIp,jdbcType=VARCHAR},
+      ip_status = #{ipStatus,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, login_name, login_password, login_salt, user_id, frist_name, last_name, 
+    user_birthday, sworn_date, email, user_role, division_id, user_status, device_password, 
+    user_sex, user_phone, create_time, last_login_time, uesr_ip, ip_status
+    from tb_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, login_name, login_password, login_salt, user_id, frist_name, last_name, 
+    user_birthday, sworn_date, email, user_role, division_id, user_status, device_password, 
+    user_sex, user_phone, create_time, last_login_time, uesr_ip, ip_status
+    from tb_user
+  </select>
+
+    <select id="selectName" resultMap="BaseResultMap">
+    select id, login_name, login_password, login_salt, user_id, frist_name, last_name,
+    user_birthday, sworn_date, email, user_role, division_id, user_status, device_password,
+    user_sex, user_phone, create_time, last_login_time, uesr_ip, ip_status
+    from tb_user
+    WHERE login_name =#{name}
+  </select>
+</mapper>

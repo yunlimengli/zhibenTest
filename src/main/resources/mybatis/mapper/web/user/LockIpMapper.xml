@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.usa.zhiben.mapper.web.user.LockIpMapper">
+    <resultMap id="BaseResultMap" type="com.usa.zhiben.bean.web.user.LockIp">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="ip_address" jdbcType="VARCHAR" property="ipAddress"/>
+        <result column="lock_time" jdbcType="TIMESTAMP" property="lockTime"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from tb_lock_ip
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <insert id="insert" parameterType="com.usa.zhiben.bean.web.user.LockIp">
+    insert into tb_lock_ip (id, ip_address, lock_time
+      )
+    values (#{id,jdbcType=INTEGER}, #{ipAddress,jdbcType=VARCHAR}, #{lockTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.usa.zhiben.bean.web.user.LockIp">
+    update tb_lock_ip
+    set ip_address = #{ipAddress,jdbcType=VARCHAR},
+      lock_time = #{lockTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, ip_address, lock_time
+    from tb_lock_ip
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, ip_address, lock_time
+    from tb_lock_ip
+  </select>
+    <select id="selectIp" resultMap="BaseResultMap">
+    select id, ip_address, lock_time
+    from tb_lock_ip
+    where ip_address = #{ipAddress}
+  </select>
+
+</mapper>

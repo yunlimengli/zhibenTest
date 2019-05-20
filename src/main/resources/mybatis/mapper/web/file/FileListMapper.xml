@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.usa.zhiben.mapper.web.file.FileListMapper" >
+  <resultMap id="BaseResultMap" type="com.usa.zhiben.bean.web.file.FileList" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <id column="file_no" property="fileNo" jdbcType="VARCHAR" />
+    <result column="officer" property="officer" jdbcType="VARCHAR" />
+    <result column="badge" property="badge" jdbcType="VARCHAR" />
+    <result column="case_id" property="caseId" jdbcType="VARCHAR" />
+    <result column="retention_day" property="retentionDay" jdbcType="INTEGER" />
+    <result column="recorded_time" property="recordedTime" jdbcType="TIMESTAMP" />
+    <result column="recorded_legth" property="recordedLegth" jdbcType="INTEGER" />
+    <result column="event_type" property="eventType" jdbcType="VARCHAR" />
+    <result column="file_type" property="fileType" jdbcType="VARCHAR" />
+    <result column="file_size" property="fileSize" jdbcType="DOUBLE" />
+    <result column="file_tag" property="fileTag" jdbcType="INTEGER" />
+    <result column="attachment" property="attachment" jdbcType="INTEGER" />
+    <result column="file_lock" property="fileLock" jdbcType="BIT" />
+    <result column="file_protect" property="fileProtect" jdbcType="BIT" />
+    <result column="license_plate" property="licensePlate" jdbcType="VARCHAR" />
+    <result column="offender" property="offender" jdbcType="VARCHAR" />
+    <result column="preview" property="preview" jdbcType="VARCHAR" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="file_path" property="filePath" jdbcType="VARCHAR" />
+    <result column="storage_server_no" property="storageServerNo" jdbcType="VARCHAR" />
+    <result column="device_id" property="deviceId" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="map" >
+    delete from tb_file_list
+    where id = #{id,jdbcType=BIGINT}
+      and file_no = #{fileNo,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.usa.zhiben.bean.web.file.FileList" >
+    insert into tb_file_list (id, file_no, officer, 
+      badge, case_id, retention_day, 
+      recorded_time, recorded_legth, event_type, 
+      file_type, file_size, file_tag, 
+      attachment, file_lock, file_protect, 
+      license_plate, offender, preview, 
+      file_name, file_path, storage_server_no, 
+      device_id, memo)
+    values (#{id,jdbcType=BIGINT}, #{fileNo,jdbcType=VARCHAR}, #{officer,jdbcType=VARCHAR}, 
+      #{badge,jdbcType=VARCHAR}, #{caseId,jdbcType=VARCHAR}, #{retentionDay,jdbcType=INTEGER}, 
+      #{recordedTime,jdbcType=TIMESTAMP}, #{recordedLegth,jdbcType=INTEGER}, #{eventType,jdbcType=VARCHAR},
+      #{fileType,jdbcType=VARCHAR}, #{fileSize,jdbcType=DOUBLE}, #{fileTag,jdbcType=INTEGER}, 
+      #{attachment,jdbcType=INTEGER}, #{fileLock,jdbcType=BIT}, #{fileProtect,jdbcType=BIT}, 
+      #{licensePlate,jdbcType=VARCHAR}, #{offender,jdbcType=VARCHAR}, #{preview,jdbcType=VARCHAR}, 
+      #{fileName,jdbcType=VARCHAR}, #{filePath,jdbcType=VARCHAR}, #{storageServerNo,jdbcType=VARCHAR}, 
+      #{deviceId,jdbcType=VARCHAR}, #{memo,jdbcType=LONGVARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.usa.zhiben.bean.web.file.FileList" >
+    update tb_file_list
+    set officer = #{officer,jdbcType=VARCHAR},
+      badge = #{badge,jdbcType=VARCHAR},
+      case_id = #{caseId,jdbcType=VARCHAR},
+      retention_day = #{retentionDay,jdbcType=INTEGER},
+      recorded_time = #{recordedTime,jdbcType=TIMESTAMP},
+      recorded_legth = #{recordedLegth,jdbcType=INTEGER},
+      event_type = #{eventType,jdbcType=VARCHAR},
+      file_type = #{fileType,jdbcType=VARCHAR},
+      file_size = #{fileSize,jdbcType=DOUBLE},
+      file_tag = #{fileTag,jdbcType=INTEGER},
+      attachment = #{attachment,jdbcType=INTEGER},
+      file_lock = #{fileLock,jdbcType=BIT},
+      file_protect = #{fileProtect,jdbcType=BIT},
+      license_plate = #{licensePlate,jdbcType=VARCHAR},
+      offender = #{offender,jdbcType=VARCHAR},
+      preview = #{preview,jdbcType=VARCHAR},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_path = #{filePath,jdbcType=VARCHAR},
+      storage_server_no = #{storageServerNo,jdbcType=VARCHAR},
+      device_id = #{deviceId,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+      and file_no = #{fileNo,jdbcType=VARCHAR}
+  </update>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="map" >
+    select id, file_no, officer, badge, case_id, retention_day, recorded_time, recorded_legth, 
+    event_type, file_type, file_size, file_tag, attachment, file_lock, file_protect, 
+    license_plate, offender, preview, file_name, file_path, storage_server_no, device_id, 
+    memo
+    from tb_file_list
+    where id = #{id,jdbcType=BIGINT}
+      and file_no = #{fileNo,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap" >
+    select id, file_no, officer, badge, case_id, retention_day, recorded_time, recorded_legth,
+    event_type, file_type, file_size, file_tag, attachment, file_lock, file_protect,
+    license_plate, offender, preview, file_name, file_path, storage_server_no, device_id,
+    memo
+    from tb_file_list
+  </select>
+
+  <!--  更新文件上传状态 -->
+  <update id="updateFileDownStatus" >
+        update  tb_file_list
+        <set>
+          is_upload = #{status},
+          <if test="serverNo != null and serverNo != ''" >
+             storage_server_no = #{serverNo},
+          </if>
+          <if test="saveRoot != null and saveRoot != ''" >
+            root = #{saveRoot},
+          </if>
+        </set>
+        where  1 = 1
+        and file_no = #{fileNo}
+  </update>
+</mapper>

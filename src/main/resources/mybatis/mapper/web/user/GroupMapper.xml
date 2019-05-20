@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.usa.zhiben.mapper.web.user.GroupMapper">
+    <resultMap id="BaseResultMap" type="com.usa.zhiben.bean.web.user.Group">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <id column="group_name" jdbcType="VARCHAR" property="groupName"/>
+        <result column="group_levels" jdbcType="INTEGER" property="groupLevels"/>
+        <result column="group_status" jdbcType="INTEGER" property="groupStatus"/>
+        <result column="creater" jdbcType="VARCHAR" property="creater"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <delete id="deleteByPrimaryKey" parameterType="map">
+    delete from tb_group
+    where id = #{id,jdbcType=INTEGER}
+      and group_name = #{groupName,jdbcType=VARCHAR}
+  </delete>
+    <insert id="insert" parameterType="com.usa.zhiben.bean.web.user.Group">
+    insert into tb_group (id, group_name, group_levels, 
+      group_status, creater, create_time, 
+      update_time)
+    values (#{id,jdbcType=INTEGER}, #{groupName,jdbcType=VARCHAR}, #{groupLevels,jdbcType=INTEGER}, 
+      #{groupStatus,jdbcType=INTEGER}, #{creater,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+    <update id="updateByPrimaryKey" parameterType="com.usa.zhiben.bean.web.user.Group">
+    update tb_group
+    set group_levels = #{groupLevels,jdbcType=INTEGER},
+      group_status = #{groupStatus,jdbcType=INTEGER},
+      creater = #{creater,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+      and group_name = #{groupName,jdbcType=VARCHAR}
+  </update>
+    <select id="selectByPrimaryKey" parameterType="map" resultMap="BaseResultMap">
+    select id, group_name, group_levels, group_status, creater, create_time, update_time
+    from tb_group
+    where id = #{id,jdbcType=INTEGER}
+      and group_name = #{groupName,jdbcType=VARCHAR}
+  </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+    select id, group_name, group_levels, group_status, creater, create_time, update_time
+    from tb_group
+  </select>
+</mapper>
